@@ -33,7 +33,16 @@ int main()
   uWS::Hub h;
 
   PID pid;
-  // TODO: Initialize the pid variable.
+  // TODO: Initialize the pid variable. 
+  //Manual tuning.
+  pid.Init(0.3,0.002,2.5);
+  //Without Kp -- Slower correction of the trajectory. The car is not able to finish the lap.
+  //pid.Init(0,0.002,2.5);
+  //Without Ki - It seems that the car overshoots a bit more but there is not a big difference between PID and PD performance.
+  //The car is able to finish the lap. It could make sense because our Ki in PID is small.
+  //pid.Init(0.3,0.0,2.5);
+  //Without Kd -- As expected, the car overshoots incrementally making the system unstable.
+  //pid.Init(0.3,0.002,0.0);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -52,11 +61,21 @@ int main()
           double angle = std::stod(j[1]["steering_angle"].get<std::string>());
           double steer_value;
           /*
-          * TODO: Calcuate steering value here, remember the steering value is
+          * TODO: Calculate steering value here, remember the steering value is
           * [-1, 1].
           * NOTE: Feel free to play around with the throttle and speed. Maybe use
           * another PID controller to control the speed!
           */
+	  pid.UpdateError(cte);
+	  steer_value = -pid.Kp * pid.p_error - pid.Kd * pid.d_error - pid.Ki *  pid.i_error;
+	  if(steer_value > 1){
+		steer_value = 1;
+	  }
+	  if(steer_value < -1){
+		steer_value = -1;
+}
+
+
           
           // DEBUG
           std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;

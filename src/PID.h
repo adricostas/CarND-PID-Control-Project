@@ -1,3 +1,6 @@
+
+#include <limits>
+
 #ifndef PID_H
 #define PID_H
 
@@ -9,6 +12,8 @@ public:
   double p_error;
   double i_error;
   double d_error;
+
+  double total_error;
 
   /*
   * Coefficients
