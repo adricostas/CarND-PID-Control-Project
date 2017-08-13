@@ -39,7 +39,7 @@ int main()
   //Without Kp -- Slower correction of the trajectory. The car is not able to finish the lap.
   //pid.Init(0,0.002,2.5);
   //Without Ki - It seems that the car overshoots a bit more but there is not a big difference between PID and PD performance.
-  //The car is able to finish the lap. It could make sense because our Ki in PID is small.
+  //The car is able to finish the lap. It could make sense because our Ki in our PID is small.
   //pid.Init(0.3,0.0,2.5);
   //Without Kd -- As expected, the car overshoots incrementally making the system unstable.
   //pid.Init(0.3,0.002,0.0);
